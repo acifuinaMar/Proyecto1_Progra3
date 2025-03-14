@@ -60,6 +60,9 @@ public class Tree {
             First, check if the char is a digit (0-9)
             if it´s then we add it to the end of the string numberr
             */
+            System.out.println("Elemento actual: " + character);
+            System.out.println("Operandos: " + operands);
+            System.out.println("Operadores: " + operators);
             if (Character.isDigit(character)) {
                 number.append(character);
             } else {
@@ -136,7 +139,32 @@ public class Tree {
                     openParentheses--;
                 }
             }
+            System.out.println("Operandos (después de procesar " + character + ")-> " + operands);
+            System.out.println("Operadores (después de procesar " + character + ")-> " + operators);
         }
+        /*
+        If the stringBuilder number still has characters on it, we send then
+        to the operands stack to make sure they are taken into account
+        for the tree and the traverses.
+        */
+        if (number.length() > 0) {
+            operands.push(new Node(number.toString()));
+        }
+        while (!operators.isEmpty()) {
+            if (operands.size() < 2) {
+                JOptionPane.showMessageDialog(null, "Expresión inválida: falta de operandos.", 
+                                          "Error", JOptionPane.ERROR_MESSAGE);
+                return null; // Salir del método
+            }
+            operands.push(buildSubtree(operators.pop(), operands.pop(), operands.pop()));
+            }
+            if (openParentheses != 0) {
+                JOptionPane.showMessageDialog(null, "Expresión inválida: paréntesis de apertura sin cierre.", 
+                                          "Error", JOptionPane.ERROR_MESSAGE);
+                return null; // Salir del método
+            }
+        return operands.pop();
+    }//End of the function createTree
         /*
         If the stringBuilder number still has characters on it, we send then
         to the operands stack to make sure they are taken into account
